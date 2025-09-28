@@ -8,6 +8,15 @@ import { CheckBadgeIcon } from './icons/CheckBadgeIcon';
 import { TagIcon } from './icons/TagIcon';
 import { CubeIcon } from './icons/CubeIcon';
 
+const currencyFormatter = new Intl.NumberFormat('ja-JP', {
+  style: 'currency',
+  currency: 'JPY',
+  maximumFractionDigits: 0,
+});
+
+const formatPrizeGrade = (grade: InventoryItem['prize']['grade']): string =>
+  grade === 'Last One' ? 'ラストワン賞' : `${grade}賞`;
+
 interface InventoryDetailModalProps {
   item: InventoryItem;
   onClose: () => void;
@@ -48,10 +57,10 @@ export const InventoryDetailModal: React.FC<InventoryDetailModalProps> = ({ item
                 <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100">
                     <CheckBadgeIcon className="h-6 w-6 text-green-600" />
                 </div>
-                <h3 className="text-2xl font-bold text-slate-900 mt-4">Reservation Confirmed!</h3>
-                <p className="text-slate-600 mt-2">Your item is held for 24 hours. Check your notifications for details on pickup at <span className="font-semibold">{item.store.name}</span>.</p>
+                <h3 className="text-2xl font-bold text-slate-900 mt-4">予約が確定しました！</h3>
+                <p className="text-slate-600 mt-2">この景品は24時間お取り置きされます。受け取り方法の詳細は通知をご確認ください（店舗：<span className="font-semibold">{item.store.name}</span>）。</p>
                 <button onClick={onClose} className="mt-6 w-full bg-indigo-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-indigo-700 transition">
-                    Done
+                    閉じる
                 </button>
             </div>
         </div>
@@ -78,7 +87,7 @@ export const InventoryDetailModal: React.FC<InventoryDetailModalProps> = ({ item
                 <img
                   key={index}
                   src={photo}
-                  alt={`Thumbnail ${index + 1}`}
+                  alt={`サムネイル${index + 1}`}
                   onClick={() => setActivePhoto(photo)}
                   className={`w-16 h-16 object-cover rounded-md cursor-pointer border-2 ${activePhoto === photo ? 'border-indigo-500' : 'border-transparent'}`}
                 />
@@ -91,20 +100,20 @@ export const InventoryDetailModal: React.FC<InventoryDetailModalProps> = ({ item
         <div className="w-full md:w-1/2 p-6 flex flex-col overflow-y-auto">
           <div className="flex-grow">
             <div className={`inline-block px-3 py-1 text-sm font-bold text-white rounded-full mb-2 ${isRare ? 'bg-amber-500' : 'bg-indigo-500'}`}>
-              {item.prize.grade} Prize
+              {formatPrizeGrade(item.prize.grade)}
             </div>
             <h2 className="text-3xl font-extrabold text-slate-900">{item.prize.title}</h2>
             <p className="text-md text-slate-500 mt-1">{item.prize.series}</p>
             
             <div className="my-6">
                 <div className="flex items-center gap-4 text-sm text-slate-700">
-                    <span className="flex items-center gap-1.5"><TagIcon className="w-5 h-5 text-indigo-500" /> Price: <span className="font-bold text-2xl text-indigo-600">${item.price.toFixed(2)}</span></span>
-                    <span className="flex items-center gap-1.5"><CubeIcon className="w-5 h-5 text-indigo-500" /> In Stock: <span className="font-bold">{item.quantity}</span></span>
+                    <span className="flex items-center gap-1.5"><TagIcon className="w-5 h-5 text-indigo-500" /> 価格: <span className="font-bold text-2xl text-indigo-600">{currencyFormatter.format(item.price)}</span></span>
+                    <span className="flex items-center gap-1.5"><CubeIcon className="w-5 h-5 text-indigo-500" /> 在庫数: <span className="font-bold">{item.quantity}</span></span>
                 </div>
             </div>
 
             <div className="bg-slate-50 p-4 rounded-lg">
-                <h4 className="font-bold text-lg text-slate-800 mb-2">Store Information</h4>
+                <h4 className="font-bold text-lg text-slate-800 mb-2">店舗情報</h4>
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                         <p className="font-semibold">{item.store.name}</p>
@@ -117,24 +126,27 @@ export const InventoryDetailModal: React.FC<InventoryDetailModalProps> = ({ item
                 </div>
                 <div className="text-sm text-slate-600 mt-2 flex items-start gap-1.5">
                     <MapPinIcon className="w-4 h-4 mt-0.5 flex-shrink-0" />
-                    <span>{item.store.address} ({item.store.distanceKm.toFixed(1)} km away)</span>
+                    <span>{item.store.address}（現在地から{item.store.distanceKm.toFixed(1)}km）</span>
                 </div>
             </div>
           </div>
-          
+
           <div className="mt-6 pt-6 border-t border-slate-200">
-             <p className="text-xs text-slate-500 mb-2 text-center">A small, refundable deposit of $3.00 is required. This will be deducted from the final price upon pickup.</p>
+             <p className="text-xs text-slate-500 mb-2 text-center">予約には返金可能なデポジット {currencyFormatter.format(300)} が必要です。受け取り時に合計金額から差し引かれます。</p>
             <button
               onClick={handleReservation}
               disabled={isReserving}
               className="w-full bg-indigo-600 text-white font-semibold py-3 px-4 rounded-md hover:bg-indigo-700 transition disabled:bg-indigo-300 disabled:cursor-not-allowed flex items-center justify-center"
             >
               {isReserving ? (
-                  <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                  </svg>
-              ) : 'Reserve with Deposit'}
+                  <>
+                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    予約処理中...
+                  </>
+              ) : 'デポジットで予約する'}
             </button>
           </div>
         </div>

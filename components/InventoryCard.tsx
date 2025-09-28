@@ -4,6 +4,15 @@ import { MapPinIcon } from './icons/MapPinIcon';
 import { StarIcon } from './icons/StarIcon';
 import { CheckBadgeIcon } from './icons/CheckBadgeIcon';
 
+const currencyFormatter = new Intl.NumberFormat('ja-JP', {
+  style: 'currency',
+  currency: 'JPY',
+  maximumFractionDigits: 0,
+});
+
+const formatPrizeGrade = (grade: InventoryItem['prize']['grade']): string =>
+  grade === 'Last One' ? 'ラストワン賞' : `${grade}賞`;
+
 interface InventoryCardProps {
   item: InventoryItem;
   onSelect: () => void;
@@ -21,11 +30,11 @@ export const InventoryCard: React.FC<InventoryCardProps> = ({ item, onSelect }) 
       <div className="relative">
         <img src={photos[0]} alt={prize.title} className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300" />
         <div className={`absolute top-2 left-2 px-2 py-1 text-xs font-bold text-white rounded-full ${isRare ? 'bg-amber-500' : 'bg-indigo-500'}`}>
-          {prize.grade} Prize
+          {formatPrizeGrade(prize.grade)}
         </div>
         {quantity === 1 && (
             <div className="absolute top-2 right-2 px-2 py-1 text-xs font-bold text-white rounded-full bg-red-600">
-                Only 1 left!
+                残り1点！
             </div>
         )}
       </div>
@@ -35,7 +44,7 @@ export const InventoryCard: React.FC<InventoryCardProps> = ({ item, onSelect }) 
         
         <div className="flex items-center justify-between mt-4">
             <div className="flex items-center gap-2">
-                <p className="text-xl font-extrabold text-indigo-600">${price.toFixed(2)}</p>
+                <p className="text-xl font-extrabold text-indigo-600">{currencyFormatter.format(price)}</p>
             </div>
             <div className="flex items-center text-sm text-slate-600 gap-1">
                 <MapPinIcon className="w-4 h-4 text-slate-400" />
@@ -47,7 +56,7 @@ export const InventoryCard: React.FC<InventoryCardProps> = ({ item, onSelect }) 
             <div className="flex items-center gap-1.5 truncate">
                 <p className="font-semibold text-slate-700 truncate">{store.name}</p>
                 {/* FIX: The `title` prop is not a valid prop for SVG components. Wrapped the icon in a `span` and moved the title attribute to it to provide the tooltip. */}
-                {store.verified && <span title="Verified Store"><CheckBadgeIcon className="w-5 h-5 text-blue-500 flex-shrink-0" /></span>}
+                {store.verified && <span title="認証済み店舗"><CheckBadgeIcon className="w-5 h-5 text-blue-500 flex-shrink-0" /></span>}
             </div>
             <div className="flex items-center gap-1">
                 <StarIcon className="w-4 h-4 text-amber-400" />
