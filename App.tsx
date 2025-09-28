@@ -21,7 +21,7 @@ const App: React.FC = () => {
       const results = await searchInventory(filters, sort);
       setInventory(results);
     } catch (err) {
-      setError('Failed to fetch inventory. Please try again later.');
+      setError('在庫情報の取得に失敗しました。時間をおいて再度お試しください。');
       console.error(err);
     } finally {
       setIsLoading(false);
@@ -47,10 +47,10 @@ const App: React.FC = () => {
       <main className="container mx-auto px-4 py-8">
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 leading-tight">
-            Find Your <span className="text-indigo-600">Prize</span>, Instantly.
+            欲しい<span className="text-indigo-600">賞品</span>を、最短で見つける。
           </h1>
           <p className="mt-4 text-lg text-slate-600 max-w-2xl mx-auto">
-            Discover and reserve leftover lottery prizes from stores near you. No more endless searching.
+            近くの店舗に眠る一番くじの在庫をサッと検索し、すぐに取り置き予約。もう探し回る必要はありません。
           </p>
         </div>
         
@@ -88,3 +88,4 @@ const App: React.FC = () => {
 };
 
 export default App;
+

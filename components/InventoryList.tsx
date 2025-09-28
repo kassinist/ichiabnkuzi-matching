@@ -12,8 +12,8 @@ export const InventoryList: React.FC<InventoryListProps> = ({ items, onSelectCar
   if (items.length === 0) {
     return (
       <div className="text-center py-16 px-6 bg-white rounded-lg shadow-md">
-        <h3 className="text-xl font-semibold text-slate-800">No Results Found</h3>
-        <p className="text-slate-500 mt-2">Try adjusting your search filters to find more prizes.</p>
+        <h3 className="text-xl font-semibold text-slate-800">該当する在庫が見つかりませんでした</h3>
+        <p className="text-slate-500 mt-2">検索条件を変更して、別の在庫を探してみてください。</p>
       </div>
     );
   }
@@ -26,3 +26,4 @@ export const InventoryList: React.FC<InventoryListProps> = ({ items, onSelectCar
     </div>
   );
 };
+

@@ -26,7 +26,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
         {/* Search Query Input */}
         <div className="md:col-span-2">
           <label htmlFor="search-query" className="block text-sm font-medium text-slate-700 mb-1">
-            Title / Prize Name
+            タイトル・賞名
           </label>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -37,7 +37,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
               id="search-query"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="e.g., 'One Piece', 'Last One Prize'"
+              placeholder="例：「ワンピース」「ラストワン賞」"
               className="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 transition"
             />
           </div>
@@ -47,7 +47,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label htmlFor="radius" className="block text-sm font-medium text-slate-700 mb-1">
-              Radius
+              検索範囲
             </label>
             <div className="relative">
                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -59,16 +59,16 @@ export const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
                 onChange={(e) => setRadius(Number(e.target.value))}
                 className="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 transition appearance-none"
               >
-                <option value={5}>5 km</option>
-                <option value={10}>10 km</option>
-                <option value={25}>25 km</option>
-                <option value={50}>50 km</option>
+                <option value={5}>5km</option>
+                <option value={10}>10km</option>
+                <option value={25}>25km</option>
+                <option value={50}>50km</option>
               </select>
             </div>
           </div>
           <div>
             <label htmlFor="prize-grade" className="block text-sm font-medium text-slate-700 mb-1">
-              Prize Grade
+              賞種
             </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -80,11 +80,11 @@ export const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
                 onChange={(e) => setPrizeGrade(e.target.value as PrizeGrade | 'all')}
                 className="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 transition appearance-none"
               >
-                <option value="all">All Grades</option>
-                <option value="A">A Prize</option>
-                <option value="B">B Prize</option>
-                <option value="C">C Prize</option>
-                <option value="Last One">Last One</option>
+                <option value="all">すべての賞</option>
+                <option value="A">A賞</option>
+                <option value="B">B賞</option>
+                <option value="C">C賞</option>
+                <option value="Last One">ラストワン賞</option>
               </select>
             </div>
           </div>
@@ -95,15 +95,15 @@ export const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
           className="w-full bg-indigo-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-indigo-700 transition flex items-center justify-center gap-2"
         >
           <SearchIcon className="h-5 w-5" />
-          Search
+          検索する
         </button>
       </form>
       
       {/* Sorting Options */}
       <div className="mt-4 flex flex-wrap gap-2 items-center">
-        <span className="text-sm font-medium text-slate-600">Sort by:</span>
+        <span className="text-sm font-medium text-slate-600">並び替え:</span>
         <div className="flex flex-wrap gap-2">
-        {([['score', 'Recommended'], ['distance', 'Distance'], ['price', 'Price'], ['newest', 'Newest']] as const).map(([value, label]) => (
+        {([['score', 'おすすめ'], ['distance', '距離が近い順'], ['price', '価格が安い順'], ['newest', '新着順']] as const).map(([value, label]) => (
             <button
               key={value}
               onClick={() => {
@@ -124,3 +124,4 @@ export const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
     </div>
   );
 };
+
